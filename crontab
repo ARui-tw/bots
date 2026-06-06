@@ -1,4 +1,4 @@
-0 21 * * * cd /app && uv run kimai_daily.py > /proc/1/fd/1 2>&1
-0 9 * * 5 cd /app && uv run kimai_weekly.py > /proc/1/fd/1 2>&1
+0 21 * * * cd /app && uv run src/kimai-report.py daily > /proc/1/fd/1 2>&1
+0 9 * * 5 cd /app && uv run src/kimai-report.py weekly > /proc/1/fd/1 2>&1
 0 21 * * * cd /app && uv run src/weather-bot.py > /proc/1/fd/1 2>&1
 
