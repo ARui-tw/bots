@@ -3,7 +3,7 @@ name: Deploy Automation Hub
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:
