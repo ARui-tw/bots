@@ -85,6 +85,10 @@ def handle_message(event):
         )
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--help":
+        print("LINE Translate Bot: Webhook server for translating LINE messages via DeepL.")
+        sys.exit(0)
+        
     print("Starting LINE Translate Bot server...")
-    # Matches the 8080 port in our docker-compose.yml
     serve(app, host="0.0.0.0", port=8000)
+

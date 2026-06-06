@@ -165,4 +165,9 @@ def job():
 
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--help":
+        print("Weather Bot: Fetches CWA API data and sends Telegram notifications.")
+        sys.exit(0)
+        
     job()
+

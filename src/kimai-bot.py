@@ -90,8 +90,14 @@ def generate_report(mode):
     print(f"Successfully sent {mode} report.")
 
 if __name__ == "__main__":
+    if len(sys.argv) > 1 and sys.argv[1] == "--help":
+        print("Kimai Report Bot: Generates timesheet summaries and sends Telegram reports.")
+        print("Usage: uv run src/kimai-report.py [daily|weekly]")
+        sys.exit(0)
+        
     if len(sys.argv) < 2 or sys.argv[1] not in ["daily", "weekly"]:
         print("Usage: uv run src/kimai-report.py [daily|weekly]")
         sys.exit(1)
         
     generate_report(sys.argv[1])
+
