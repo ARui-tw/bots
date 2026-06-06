@@ -14,7 +14,7 @@ from datetime import datetime, timedelta, timezone
 urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
 
 # Configs
-CWA_API_KEY = os.environ.get("OPENWEATHER_API_KEY")
+CWA_API_KEY = os.environ.get("CWA_API_KEY")
 TG_TOKEN = os.environ.get("WEATHER_BOT_TOKEN")
 TG_CHAT_ID = os.environ.get("CHAT_ID")
 
