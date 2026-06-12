@@ -1,6 +1,6 @@
 PATH=/usr/local/bin:/usr/bin:/bin
 
 0 21 * * * cd /app && uv run src/kimai-bot.py daily > /proc/1/fd/1 2>&1
-0 9 * * 5 cd /app && uv run src/kimai-bot.py weekly > /proc/1/fd/1 2>&1
+0 21 * * 5 cd /app && uv run src/kimai-bot.py weekly > /proc/1/fd/1 2>&1
 0 21 * * * cd /app && uv run src/weather-bot.py > /proc/1/fd/1 2>&1
 
