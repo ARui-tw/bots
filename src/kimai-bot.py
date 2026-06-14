@@ -75,6 +75,11 @@ def generate_report(mode):
         
         if pname not in non_work_projects:
             work_seconds += dur
+
+    # Skip sending report if daily work time is 0
+    if mode == "daily" and work_seconds == 0:
+        print("No work logged today. Report skipped.")
+        return
             
     report = f"{title}\n\n"
     for pname, dur in summary.items():
@@ -100,4 +105,3 @@ if __name__ == "__main__":
         sys.exit(1)
         
     generate_report(sys.argv[1])
-
