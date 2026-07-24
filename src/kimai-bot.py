@@ -38,6 +38,14 @@ def get_projects():
     res = requests.get(f"{KIMAI_URL}/api/projects", headers=get_headers())
     return {p["id"]: p["name"] for p in res.json()} if res.status_code == 200 else {}
 
+def fmt_overtime(ot_sec):
+    sign = "-" if ot_sec < 0 else "+"
+    total_min = int(abs(ot_sec) // 60)
+    h, m = divmod(total_min, 60)
+    if h > 0:
+        return f"{sign}{h}h{m:02d}m"
+    return f"{sign}{m}m"
+
 def generate_report(mode):
     user_id = get_user_id()
     now = datetime.now()
@@ -85,9 +93,35 @@ def generate_report(mode):
     for pname, dur in summary.items():
         report += f"- {pname}: {dur/3600:.2f}h\n"
         
+    if mode == "weekly":
+        # Per-day overtime breakdown
+        DAY_NAMES = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"]
+        DAILY_EXPECTED = 28800  # 8 hours
+        monday = now - timedelta(days=now.weekday())
+
+        day_work = {}
+        for e in entries:
+            dur = e.get("duration", 0)
+            pid = e.get("project")
+            pname = projects.get(pid, f"Project {pid}")
+            if pname in non_work_projects:
+                continue
+            try:
+                entry_dt = datetime.fromisoformat(e.get("begin", ""))
+            except (ValueError, TypeError):
+                continue
+            day_idx = entry_dt.weekday()
+            day_work[day_idx] = day_work.get(day_idx, 0) + dur
+
+        report += "\n*Daily Overtime:*\n"
+        for i in range(now.weekday() + 1):
+            day_date = (monday + timedelta(days=i)).strftime("%m/%d")
+            ot = day_work.get(i, 0) - DAILY_EXPECTED
+            report += f"  {DAY_NAMES[i]} {day_date}: {fmt_overtime(ot)}\n"
+
     ot_sec = work_seconds - expected_sec
-    ot_str = f"{'-' if ot_sec < 0 else ''}{int(abs(ot_sec) // 60)}m ({abs(ot_sec) / 3600:.1f}h)"
-        
+    ot_str = fmt_overtime(ot_sec)
+
     report += f"\n*Total Logged:* {total_seconds/3600:.2f}h"
     report += f"\n*Overtime:* {ot_str}"
     
